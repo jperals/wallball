@@ -7,6 +7,7 @@ import org.jbox2d.common.*;
 import org.jbox2d.dynamics.*;
 
 ArrayList<Wall> walls;
+ArrayList<Ball> balls;
 ArrayList<PVector> newPath;
 color bgColor = 0;
 int pointsPerPath;
@@ -16,6 +17,7 @@ void setup() {
   size(768, 768);
   box2d = new PBox2D(this);
   box2d.createWorld();
+  balls = new ArrayList<Ball>();
   walls = new ArrayList<Wall>();
   newPath = new ArrayList<PVector>();
   pointsPerPath = 10;
@@ -26,6 +28,9 @@ void draw() {
   background(bgColor);
   fill(110, 110, 110);
   stroke(91, 91, 91);
+  for(int i = 0; i < balls.size(); i++) {
+    balls.get(i).display();
+  }
   for(int i = 0; i < walls.size(); i++) {
     walls.get(i).display();
   }
@@ -54,5 +59,7 @@ void mouseReleased() {
     line(oldPoint.x, oldPoint.y, newPoint.x, newPoint.y);
     oldPoint = newPoint;
   }
+  Ball ball = new Ball(width/2, 20);
+  balls.add(ball);
 }
 
