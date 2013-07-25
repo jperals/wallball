@@ -11,12 +11,13 @@ ArrayList<Ball> balls;
 ArrayList<PVector> newPath;
 color bgColor = 0;
 int pointsPerPath;
-PBox2D box2d;
+Physics box2d;
 
 void setup() {
   size(768, 768);
-  box2d = new PBox2D(this);
-  box2d.createWorld();
+  box2d = new Physics(this, width, height, 0, -10, width*2, height*2, width, height, 100);
+  box2d.setCustomRenderingMethod(this, "myCustomRenderer");
+  box2d.setDensity(10.0);
   balls = new ArrayList<Ball>();
   walls = new ArrayList<Wall>();
   newPath = new ArrayList<PVector>();
@@ -24,16 +25,9 @@ void setup() {
 }
 
 void draw() {
-  box2d.step();
   background(bgColor);
   fill(110, 110, 110);
   stroke(91, 91, 91);
-  for(int i = 0; i < balls.size(); i++) {
-    balls.get(i).display();
-  }
-  for(int i = 0; i < walls.size(); i++) {
-    walls.get(i).display();
-  }
 }
 
 void mousePressed() {
@@ -49,7 +43,15 @@ void mouseReleased() {
   newPath = new ArrayList<PVector>();
   Wall wall =  new Wall(simplifiedPath);
   walls.add(wall);
-  Ball ball = new Ball(width/2, 20);
+  Ball ball = new Ball(width/2, 10, 10);
   balls.add(ball);
 }
 
+void myCustomRenderer(World world) {
+  for(int i = 0; i < balls.size(); i++) {
+    balls.get(i).display();
+  }
+  for(int i = 0; i < walls.size(); i++) {
+    walls.get(i).display();
+  }
+}

@@ -1,18 +1,20 @@
 class Ball {
   
   Body body;
+  int radius;
   
-  Ball(float x, float y) {
+  Ball(float x, float y, int r) {
+    radius = r;
     BodyDef bd = new BodyDef();
-    bd.type = BodyType.DYNAMIC;
-    bd.position.set(box2d.coordPixelsToWorld(x, y));
-    body = box2d.createBody(bd);
+    bd.type = Body.b2_dynamicBody;
+    bd.position.set(box2d.screenToWorld(x, y));
+    body = box2d.m_world.CreateBody(bd);
     Vec2 bodyPosition = body.getPosition();
-    Vec2 pos = box2d.coordWorldToPixels(bodyPosition);
+    Vec2 pos = box2d.screenToWorld(bodyPosition);
     float posX = pos.x;
     float posY = pos.y;
     CircleShape cs = new CircleShape();
-    cs.m_radius = 1;
+    cs.m_radius = box2d.screenToWorld(radius);
     FixtureDef fd = new FixtureDef();
     fd.shape = cs;
     fd.density = 1;
@@ -21,8 +23,9 @@ class Ball {
     body.createFixture(fd);
   }
   void display() {
-    Vec2 bodyPosition = box2d.getBodyPixelCoord(body);
+    Vec2 bodyPosition = body.getPosition();
+    Vec2 bodyPixelsPosition = box2d.worldToScreen(bodyPosition);
     ellipseMode(CENTER);
-    ellipse(bodyPosition.x, bodyPosition.y, 20, 20);
+    ellipse(bodyPixelsPosition.x, bodyPixelsPosition.y, radius*2, radius*2);
   }
 }
