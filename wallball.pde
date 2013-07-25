@@ -41,10 +41,7 @@ void mousePressed() {
 }
 
 void mouseDragged() {
-  PVector lastPoint = newPath.get(newPath.size() - 1);
   newPath.add(new PVector(mouseX, mouseY));
-  stroke(0);
-  line(lastPoint.x, lastPoint.y, mouseX, mouseY);
 }
 
 void mouseReleased() {
@@ -52,13 +49,6 @@ void mouseReleased() {
   newPath = new ArrayList<PVector>();
   Wall wall =  new Wall(simplifiedPath);
   walls.add(wall);
-  PVector oldPoint = simplifiedPath[0];
-  stroke(255, 0, 0);
-  for(int i = 1; i < simplifiedPath.length; i++) {
-    PVector newPoint = simplifiedPath[i];
-    line(oldPoint.x, oldPoint.y, newPoint.x, newPoint.y);
-    oldPoint = newPoint;
-  }
   Ball ball = new Ball(width/2, 20);
   balls.add(ball);
 }

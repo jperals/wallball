@@ -4,9 +4,7 @@
 PVector[] simplifyPath(ArrayList<PVector> originalPath) {
   int simplifiedPathSize = Math.min(originalPath.size(), pointsPerPath);
   PVector[] simplifiedPath = new PVector[simplifiedPathSize];
-  println("simplifiedPathSize: " + simplifiedPathSize);
   int jump = Math.round(originalPath.size()/(float)simplifiedPathSize);
-  println("Math.round(" + originalPath.size() + "/" + simplifiedPathSize + ") = " + jump);
   int simplifiedPathIndex = 0;
   for(int originalPathIndex = 0; simplifiedPathIndex < simplifiedPathSize; originalPathIndex += jump) {
     simplifiedPath[simplifiedPathIndex] = originalPath.get(Math.min(originalPathIndex, originalPath.size() - 1));
