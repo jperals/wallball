@@ -13,7 +13,10 @@ class Wall {
         PVector newPoint = path[i];
         PolygonShape ps = new PolygonShape();
         float distance = box2d.screenToWorld(oldPoint.dist(newPoint));
-        float w = distance*.5, h = box2d.screenToWorld(1);
+        //println(distance);
+        //float wallWidth = 0.1 + min(3, 0.2/distance);
+        float wallWidth = 0.5;
+        float w = distance*.5, h = box2d.screenToWorld(wallWidth);
         float rotation = getAngle(oldPoint, newPoint);
         float pixelPosX = (oldPoint.x + newPoint.x)/2 - path[0].x;
         float pixelPosY = (oldPoint.y + newPoint.y)/2 - path[0].y;

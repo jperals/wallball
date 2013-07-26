@@ -1,10 +1,12 @@
 class Ball {
   
   Body body;
+  color ballColor;
   int radius;
   
-  Ball(float x, float y, int r) {
+  Ball(float x, float y, int r, color c) {
     radius = r;
+    ballColor = c;
     BodyDef bd = new BodyDef();
     bd.type = Body.b2_dynamicBody;
     bd.position.set(box2d.screenToWorld(x, y));
@@ -26,6 +28,7 @@ class Ball {
     Vec2 bodyPosition = body.getPosition();
     Vec2 bodyPixelsPosition = box2d.worldToScreen(bodyPosition);
     ellipseMode(CENTER);
+    fill(ballColor);
     ellipse(bodyPixelsPosition.x, bodyPixelsPosition.y - scroll, radius*2, radius*2);
   }
 }
