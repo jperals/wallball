@@ -36,7 +36,7 @@ class Wall {
       Vec2[] vertices = shape.GetVertices();
       beginShape();
       pushMatrix();
-      translate(bodyPosition.x, bodyPosition.y);
+      translate(bodyPosition.x, bodyPosition.y - scroll);
       for(int i = 0; i < 4; i++) {
         Vec2 pos = box2d.worldToScreen(vertices[i].x, vertices[i].y);
         float x = pos.x;

@@ -1,7 +1,6 @@
 // The GPL License
 // Copyright (c) 2013 Joan Perals Tresserra
 
-import pbox2d.*;
 import org.jbox2d.collision.shapes.*;
 import org.jbox2d.common.*;
 import org.jbox2d.dynamics.*;
@@ -12,6 +11,7 @@ ArrayList<PVector> newPath;
 color bgColor = 0;
 int pointsPerPath;
 Physics box2d;
+float scroll;
 
 void setup() {
   size(768, 768);
@@ -22,20 +22,22 @@ void setup() {
   walls = new ArrayList<Wall>();
   newPath = new ArrayList<PVector>();
   pointsPerPath = 10;
+  scroll = 0;
 }
 
 void draw() {
   background(bgColor);
   fill(110, 110, 110);
   stroke(91, 91, 91);
+  scroll += 0.5;
 }
 
 void mousePressed() {
-  newPath.add(new PVector(mouseX, mouseY));
+  newPath.add(new PVector(mouseX, mouseY + scroll));
 }
 
 void mouseDragged() {
-  newPath.add(new PVector(mouseX, mouseY));
+  newPath.add(new PVector(mouseX, mouseY + scroll));
 }
 
 void mouseReleased() {
@@ -43,7 +45,7 @@ void mouseReleased() {
   newPath = new ArrayList<PVector>();
   Wall wall =  new Wall(simplifiedPath);
   walls.add(wall);
-  Ball ball = new Ball(width/2, 10, 10);
+  Ball ball = new Ball(width/2, 10 + scroll, 10);
   balls.add(ball);
 }
 

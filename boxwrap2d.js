@@ -1044,7 +1044,7 @@ Physics = function (sketch, screenW,  screenH,
 	//physics.m_world = new b2World(worldAABB,physics.m_gravity,doSleep);
 	physics.m_world = new World(physics.m_gravity,doSleep);
 		
-	physics.m_border = physics.createHollowBox(screenW*0.5, screenH*0.5, borderBoxWidth, borderBoxHeight, 10.0);
+	//physics.m_border = physics.createHollowBox(screenW*0.5, screenH*0.5, borderBoxWidth, borderBoxHeight, 10.0);
 	
 	
 	
