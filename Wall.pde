@@ -30,7 +30,6 @@ class Wall {
     }
   }
   void display() {
-    fill(110, 110, 110);
     Vec2 bodyPosition = box2d.worldToScreen(body.getWorldCenter());
     for(Fixture f = body.getFixtureList(); f != null; f = f.GetNext()) {
       PolygonShape shape = (PolygonShape)(f.GetShape());

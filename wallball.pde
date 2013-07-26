@@ -18,11 +18,13 @@ int nextBallCountDown;
 int addBallEvery;
 
 void setup() {
-  size(768, 768);
+  size(320, 400);
+  frameRate(30);
+  addBallEvery = 60;
   bgColor = 0;
   ballColor = color(31, 255, 63);
   wallColor = color(110, 110, 100);
-  box2d = new Physics(this, width, height, 0, -10, width*2, height*2, width, height, 100);
+  box2d = new Physics(this, width, height, 0, -30, width*2, height*2, width, height, 100);
   box2d.setCustomRenderingMethod(this, "myCustomRenderer");
   box2d.setDensity(10.0);
   balls = new ArrayList<Ball>();
@@ -31,7 +33,6 @@ void setup() {
   pointsPerPath = 10;
   scroll = 0;
   dScroll = 1;
-  addBallEvery = 120;
   nextBallCountDown = addBallEvery;
   Ball ball = new Ball(width/2, scroll - 20, 10);
   balls.add(ball);
@@ -65,9 +66,11 @@ void mouseReleased() {
 }
 
 void myCustomRenderer(World world) {
+  fill(ballColor);
   for(int i = 0; i < balls.size(); i++) {
     balls.get(i).display();
   }
+  fill(wallColor);
   for(int i = 0; i < walls.size(); i++) {
     walls.get(i).display();
   }

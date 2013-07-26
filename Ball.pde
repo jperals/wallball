@@ -26,7 +26,6 @@ class Ball {
     Vec2 bodyPosition = body.getPosition();
     Vec2 bodyPixelsPosition = box2d.worldToScreen(bodyPosition);
     ellipseMode(CENTER);
-    fill(ballColor);
     ellipse(bodyPixelsPosition.x, bodyPixelsPosition.y - scroll, radius*2, radius*2);
   }
 }
