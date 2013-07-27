@@ -19,18 +19,20 @@ float ddScroll;
 int nextBallPosition;
 int nextBallCountDown;
 int addBallEvery;
+int score;
 CollisionDetector detector;
 
 void setup() {
   size(640, 800);
   frameRate(30);
-  addBallEvery = 240;
+  addBallEvery = 80;
   bgColor = 0;
   ballColors = new color[]{#FF0000, #00FF00, #0000FF};
   pointsPerPath = 30;
   scroll = 0;
   dScroll = 0.1;
   ddScroll = 0.0001;
+  score = 0;
   prepareNextBall();
   box2d = new Physics(this, width, height, 0, -5, width*2, height*2, width, height, 100);
   box2d.setCustomRenderingMethod(this, "myCustomRenderer");
@@ -43,6 +45,8 @@ void setup() {
 
 void draw() {
   background(bgColor);
+  fill(255);
+  text("Score: " + score, 20, 20);
   if(addBallEvery - nextBallCountDown > 60) {
     drawNextBallIndicator();
   }    
@@ -95,35 +99,25 @@ void myCustomRenderer(World world) {
 }
 
 void addNewBall() {
-  Ball ball = new Ball(nextBallPosition, scroll - 14, 7, nextBallColor);
+  Ball ball = new Ball(nextBallPosition, scroll - 7, 7, nextBallColor);
   balls.add(ball);
   prepareNextBall();
 }
 
 void collision(Body b1, Body b2, float impulse) {
-  if(b1.getMass() != 0 || b2.getMass() != 0) {
-    if(b1.getMass() != 0 && b2.getMass() != 0) { // two balls collided
-      if(b1.ballColor == b2.ballColor) {
-        Ball ball1 = getBall(balls, b1);
-        ball1.toBeRemoved = true;
-        Ball ball2 = getBall(balls, b2);
-        ball2.toBeRemoved = true;
-      }
+  if((b1.getMass() != 0 && b2.getMass() == 0) || (b1.getMass() == 0 && b2.getMass() != 0)) {
+    Ball ball;
+    Wall wall;
+    if(b1.getMass() != 0) {
+      ball = getBall(balls, b1);
+      wall = getWall(walls, b2);
     }
-    else { // a ball collided with a wall
-      Ball ball;
-      Wall wall;
-      if(b1.getMass() != 0) {
-        ball = getBall(balls, b1);
-        wall = getWall(walls, b2);
-      }
-      else {
-        ball = getBall(balls, b2);
-        wall = getWall(walls, b1);
-      }
-      color ballColor = ball.ballColor;
-      wall.addColor(ballColor);
+    else {
+      ball = getBall(balls, b2);
+      wall = getWall(walls, b1);
     }
+    color ballColor = ball.ballColor;
+    wall.addColor(ballColor);
   }
 }
 

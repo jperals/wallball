@@ -52,6 +52,7 @@ class Wall {
     wallColor = color(redValue, greenValue, blueValue);
     if(redValue == 255 && greenValue == 255 && blueValue == 255) {
       toBeRemoved = true;
+      score ++;
     }
   }
   
