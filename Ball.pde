@@ -3,10 +3,12 @@ class Ball {
   Body body;
   color ballColor;
   int radius;
+  boolean toBeRemoved;
   
   Ball(float x, float y, int r, color c) {
-    radius = r;
     ballColor = c;
+    radius = r;
+    toBeRemoved = false;
     BodyDef bd = new BodyDef();
     bd.type = Body.b2_dynamicBody;
     bd.position.set(box2d.screenToWorld(x, y));
@@ -23,6 +25,7 @@ class Ball {
     fd.friction = 0.3;
     fd.restitution = 0.5;
     body.createFixture(fd);
+    body.ballColor = ballColor;
   }
   void display() {
     Vec2 bodyPosition = body.getPosition();
@@ -32,3 +35,15 @@ class Ball {
     ellipse(bodyPixelsPosition.x, bodyPixelsPosition.y - scroll, radius*2, radius*2);
   }
 }
+
+Ball getBall(ArrayList<Ball> balls, Body body) {
+  Ball matchedBall; 
+  for(int i = 0; i < balls.size(); i++) {
+    Ball ball = balls.get(i);
+    if(ball.body == body) {
+      matchedBall = ball;
+    }
+  }
+  return matchedBall;
+}
+

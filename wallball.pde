@@ -11,13 +11,13 @@ ArrayList<PVector> newPath;
 color bgColor = 0;
 color[] ballColors;
 color nextBallColor;
-color wallColor;
 int pointsPerPath;
 Physics box2d;
 float scroll;
 int nextBallPosition;
 int nextBallCountDown;
 int addBallEvery;
+CollisionDetector detector;
 
 void setup() {
   size(640, 800);
@@ -25,31 +25,27 @@ void setup() {
   addBallEvery = 60;
   bgColor = 0;
   ballColors = new color[]{#FF0000, #00FF00, #0000FF};
-  wallColor = color(110, 110, 100);
-  pointsPerPath = 150;
+  pointsPerPath = 30;
   scroll = 0;
-  dScroll = 1;
-  nextBallPosition = random(width);
-  nextBallCountDown = addBallEvery;
-  nextBallColor = getRandomBallColor();
-  box2d = new Physics(this, width, height, 0, -10, width*2, height*2, width, height, 100);
+  dScroll = 0.25;
+  prepareNextBall();
+  box2d = new Physics(this, width, height, 0, -5, width*2, height*2, width, height, 100);
   box2d.setCustomRenderingMethod(this, "myCustomRenderer");
   box2d.setDensity(10.0);
   balls = new ArrayList<Ball>();
   walls = new ArrayList<Wall>();
   newPath = new ArrayList<PVector>();
-  addNewBall();
+  detector = new CollisionDetector (box2d, this);
 }
 
 void draw() {
   background(bgColor);
-  nextBallCountDown --;
+  drawNextBallIndicator();
   if(nextBallCountDown == 0) {
-    nextBallColor = getRandomBallColor();
-    nextBallPosition = random(width);
     addNewBall();
-    nextBallCountDown = addBallEvery;
+    //nextBallCountDown = addBallEvery;
   }
+  nextBallCountDown --;
   scroll += dScroll;
 }
 
@@ -71,18 +67,45 @@ void mouseReleased() {
 void myCustomRenderer(World world) {
   noStroke();
   for(int i = 0; i < balls.size(); i++) {
-    balls.get(i).display();
+    Ball ball = balls.get(i);
+    if(ball.toBeRemoved) {
+      box2d.removeBody(ball.body);
+      balls.remove(ball);
+    }
+    else {
+      ball.display();
+    }
   }
-  fill(wallColor);
-  stroke(wallColor);
   for(int i = 0; i < walls.size(); i++) {
     walls.get(i).display();
   }
 }
 
 void addNewBall() {
-  Ball ball = new Ball(nextBallPosition, scroll - 20, 10, nextBallColor);
+  Ball ball = new Ball(nextBallPosition, scroll - 14, 7, nextBallColor);
   balls.add(ball);
+  prepareNextBall();
+}
+
+void collision(Body b1, Body b2, float impulse) {
+  if(b1.getMass() != 0 && b2.getMass() != 0) {
+    if(b1.ballColor == b2.ballColor) {
+      Ball ball1 = getBall(balls, b1);
+      ball1.toBeRemoved = true;
+      Ball ball2 = getBall(balls, b2);
+      ball2.toBeRemoved = true;
+    }
+  }
+  //else 
+}
+
+void drawNextBallIndicator() {
+  fill(nextBallColor);
+  noStroke();
+  pushMatrix();
+  translate(nextBallPosition, 10);
+  triangle(0, 0, 10, 10, -10, 10);
+  popMatrix();
 }
 
 color getRandomBallColor() {
@@ -90,3 +113,10 @@ color getRandomBallColor() {
   index = min(index, ballColors.length - 1);
   return ballColors[index];
 }
+
+void prepareNextBall() {
+  nextBallColor = getRandomBallColor();
+  nextBallPosition = random(width);
+  nextBallCountDown = addBallEvery;
+}
+

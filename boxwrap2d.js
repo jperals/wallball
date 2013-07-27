@@ -845,7 +845,7 @@ Physics = function (sketch, screenW,  screenH,
 		
 		/** Remove a body from the world. */
 		removeBody : function(b) {
-			this.m_world.destroyBody(b);
+			this.m_world.DestroyBody(b);
 		},
 		
 		/** Remove a joint from the world. */

@@ -1,8 +1,10 @@
 class Wall {
   
   Body body;
+  color wallColor;
   
   Wall(PVector[] path) {
+    wallColor = color(100, 100, 100);
     BodyDef bd = new BodyDef();
     bd.type = Body.b2_staticBody;
     bd.position.set(box2d.screenToWorld(path[0].x, path[0].y));
@@ -33,6 +35,8 @@ class Wall {
     }
   }
   void display() {
+    fill(wallColor);
+    stroke(wallColor);
     Vec2 bodyPosition = box2d.worldToScreen(body.getWorldCenter());
     for(Fixture f = body.getFixtureList(); f != null; f = f.GetNext()) {
       PolygonShape shape = (PolygonShape)(f.GetShape());
