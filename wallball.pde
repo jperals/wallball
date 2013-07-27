@@ -88,15 +88,30 @@ void addNewBall() {
 }
 
 void collision(Body b1, Body b2, float impulse) {
-  if(b1.getMass() != 0 && b2.getMass() != 0) {
-    if(b1.ballColor == b2.ballColor) {
-      Ball ball1 = getBall(balls, b1);
-      ball1.toBeRemoved = true;
-      Ball ball2 = getBall(balls, b2);
-      ball2.toBeRemoved = true;
+  if(b1.getMass() != 0 || b2.getMass() != 0) {
+    if(b1.getMass() != 0 && b2.getMass() != 0) { // two balls collided
+      if(b1.ballColor == b2.ballColor) {
+        Ball ball1 = getBall(balls, b1);
+        ball1.toBeRemoved = true;
+        Ball ball2 = getBall(balls, b2);
+        ball2.toBeRemoved = true;
+      }
+    }
+    else { // a ball collided with a wall
+      Ball ball;
+      Wall wall;
+      if(b1.getMass() != 0) {
+        ball = getBall(balls, b1);
+        wall = getWall(walls, b2);
+      }
+      else {
+        ball = getBall(balls, b2);
+        wall = getWall(walls, b1);
+      }
+      color ballColor = ball.ballColor;
+      wall.addColor(ballColor);
     }
   }
-  //else 
 }
 
 void drawNextBallIndicator() {

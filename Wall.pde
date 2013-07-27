@@ -2,9 +2,11 @@ class Wall {
   
   Body body;
   color wallColor;
+  color emptyColor;
   
   Wall(PVector[] path) {
-    wallColor = color(100, 100, 100);
+    emptyColor = color(100, 100, 100);
+    wallColor = color(0);
     BodyDef bd = new BodyDef();
     bd.type = Body.b2_staticBody;
     bd.position.set(box2d.screenToWorld(path[0].x, path[0].y));
@@ -34,9 +36,29 @@ class Wall {
       }
     }
   }
+  
+  void addColor(color newColor) {
+    float oldRed = wallColor >> 16 & 0xFF;;
+    float oldGreen = wallColor >> 8 & 0xFF;
+    float oldBlue = wallColor & 0xFF;
+    float newRed = newColor >> 16 & 0xFF;;
+    float newGreen = newColor >> 8 & 0xFF;
+    float newBlue = newColor & 0xFF;
+    float redValue = oldRed | newRed;
+    float greenValue = oldGreen | newGreen;
+    float blueValue = oldBlue | newBlue;
+    wallColor = color(redValue, greenValue, blueValue);
+  }
+  
   void display() {
-    fill(wallColor);
-    stroke(wallColor);
+    if(brightness(wallColor) == 0) {
+      fill(emptyColor);
+      stroke(emptyColor);
+    }
+    else {
+      fill(wallColor);
+      stroke(wallColor);
+    }
     Vec2 bodyPosition = box2d.worldToScreen(body.getWorldCenter());
     for(Fixture f = body.getFixtureList(); f != null; f = f.GetNext()) {
       PolygonShape shape = (PolygonShape)(f.GetShape());
@@ -54,4 +76,17 @@ class Wall {
       popMatrix();
     }
   }
+  
 }
+
+Wall getWall(ArrayList<Wall> walls, Body body) {
+  Wall matchedWall; 
+  for(int i = 0; i < walls.size(); i++) {
+    Wall wall = walls.get(i);
+    if(wall.body == body) {
+      matchedWall = wall;
+    }
+  }
+  return matchedWall;
+}
+
