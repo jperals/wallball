@@ -14,6 +14,8 @@ color nextBallColor;
 int pointsPerPath;
 Physics box2d;
 float scroll;
+float dScroll;
+float ddScroll;
 int nextBallPosition;
 int nextBallCountDown;
 int addBallEvery;
@@ -22,12 +24,13 @@ CollisionDetector detector;
 void setup() {
   size(640, 800);
   frameRate(30);
-  addBallEvery = 60;
+  addBallEvery = 240;
   bgColor = 0;
   ballColors = new color[]{#FF0000, #00FF00, #0000FF};
   pointsPerPath = 30;
   scroll = 0;
-  dScroll = 0.25;
+  dScroll = 0.1;
+  ddScroll = 0.0001;
   prepareNextBall();
   box2d = new Physics(this, width, height, 0, -5, width*2, height*2, width, height, 100);
   box2d.setCustomRenderingMethod(this, "myCustomRenderer");
@@ -40,13 +43,16 @@ void setup() {
 
 void draw() {
   background(bgColor);
-  drawNextBallIndicator();
+  if(addBallEvery - nextBallCountDown > 60) {
+    drawNextBallIndicator();
+  }    
   if(nextBallCountDown == 0) {
     addNewBall();
     //nextBallCountDown = addBallEvery;
   }
   nextBallCountDown --;
   scroll += dScroll;
+  dScroll += ddScroll;
 }
 
 void mousePressed() {
@@ -77,7 +83,14 @@ void myCustomRenderer(World world) {
     }
   }
   for(int i = 0; i < walls.size(); i++) {
-    walls.get(i).display();
+    Wall wall = walls.get(i);
+    if(wall.toBeRemoved) {
+      box2d.removeBody(wall.body);
+      walls.remove(wall);
+    }
+    else {
+      wall.display();
+    }
   }
 }
 

@@ -3,10 +3,12 @@ class Wall {
   Body body;
   color wallColor;
   color emptyColor;
+  boolean toBeRemoved;
   
   Wall(PVector[] path) {
     emptyColor = color(100, 100, 100);
     wallColor = color(0);
+    toBeRemoved = false;
     BodyDef bd = new BodyDef();
     bd.type = Body.b2_staticBody;
     bd.position.set(box2d.screenToWorld(path[0].x, path[0].y));
@@ -48,6 +50,9 @@ class Wall {
     float greenValue = oldGreen | newGreen;
     float blueValue = oldBlue | newBlue;
     wallColor = color(redValue, greenValue, blueValue);
+    if(redValue == 255 && greenValue == 255 && blueValue == 255) {
+      toBeRemoved = true;
+    }
   }
   
   void display() {
