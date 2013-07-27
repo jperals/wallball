@@ -22,6 +22,8 @@ int addBallEvery;
 int score;
 CollisionDetector detector;
 
+Maxim maxim;
+
 void setup() {
   size(640, 800);
   frameRate(30);
@@ -33,6 +35,7 @@ void setup() {
   dScroll = 0.1;
   ddScroll = 0.0001;
   score = 0;
+  maxim = new Maxim(this);
   prepareNextBall();
   box2d = new Physics(this, width, height, 0, -5, width*2, height*2, width, height, 100);
   box2d.setCustomRenderingMethod(this, "myCustomRenderer");
@@ -116,6 +119,8 @@ void collision(Body b1, Body b2, float impulse) {
       ball = getBall(balls, b2);
       wall = getWall(walls, b1);
     }
+    ball.ballSound.cue(0);
+    ball.ballSound.play();
     color ballColor = ball.ballColor;
     wall.addColor(ballColor);
   }

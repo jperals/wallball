@@ -4,11 +4,15 @@ class Ball {
   color ballColor;
   int radius;
   boolean toBeRemoved;
+  AudioPlayer ballSound;
   
   Ball(float x, float y, int r, color c) {
     ballColor = c;
     radius = r;
     toBeRemoved = false;
+    ballSound = maxim.loadFile("ball.wav");
+    ballSound.setLooping = false;
+    ballSound.volume(1.0);
     BodyDef bd = new BodyDef();
     bd.type = Body.b2_dynamicBody;
     bd.position.set(box2d.screenToWorld(x, y));
