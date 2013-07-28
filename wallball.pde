@@ -98,9 +98,7 @@ void myCustomRenderer(World world) {
   for(int i = 0; i < walls.size(); i++) {
     Wall wall = walls.get(i);
     if(wall.toBeRemoved) {
-      //wall.body.type = Body.b2_dynamicBody;
-      box2d.removeBody(wall.body);
-      walls.remove(wall);
+      wall.breakWall(box2d);
     }
     else {
       wall.display();
