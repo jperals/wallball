@@ -126,7 +126,7 @@ void collision(Body b1, Body b2, float impulse) {
       ball = getBall(balls, b2);
       wall = getWall(walls, b1);
     }
-    playBallSound(ball.ballSound, impulse);
+    playBallSound(impulse);
     color ballColor = ball.ballColor;
     wall.combineColor(ballColor);
   }
