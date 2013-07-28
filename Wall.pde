@@ -7,7 +7,7 @@ class Wall {
   
   Wall(PVector[] path) {
     emptyColor = color(100, 100, 100);
-    wallColor = color(255);
+    wallColor = color(0);
     toBeRemoved = false;
     BodyDef bd = new BodyDef();
     bd.type = Body.b2_staticBody;
@@ -40,17 +40,17 @@ class Wall {
   }
   
   void addColor(color newColor) {
-    float oldRed = wallColor >> 16 & 0xFF;
+    float oldRed = wallColor >> 16 & 0xFF;;
     float oldGreen = wallColor >> 8 & 0xFF;
     float oldBlue = wallColor & 0xFF;
-    float newRed = newColor >> 16 & 0xFF;
+    float newRed = newColor >> 16 & 0xFF;;
     float newGreen = newColor >> 8 & 0xFF;
     float newBlue = newColor & 0xFF;
-    float redValue = oldRed & ~newRed;
-    float greenValue = oldGreen & ~newGreen;
-    float blueValue = oldBlue & ~newBlue;
+    float redValue = oldRed | newRed;
+    float greenValue = oldGreen | newGreen;
+    float blueValue = oldBlue | newBlue;
     wallColor = color(redValue, greenValue, blueValue);
-    if(redValue == 0 && greenValue == 0 && blueValue == 0) {
+    if(redValue == 255 && greenValue == 255 && blueValue == 255) {
       toBeRemoved = true;
       score ++;
     }
