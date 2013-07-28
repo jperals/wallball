@@ -5,6 +5,7 @@ class Wall {
   color emptyColor;
   boolean toBeRemoved;
   
+  // constructor
   Wall(PVector[] path) {
     emptyColor = color(100, 100, 100);
     wallColor = color(0);
@@ -39,7 +40,7 @@ class Wall {
     }
   }
   
-  void addColor(color newColor) {
+  void combineColor(color newColor) {
     float oldRed = wallColor >> 16 & 0xFF;;
     float oldGreen = wallColor >> 8 & 0xFF;
     float oldBlue = wallColor & 0xFF;
@@ -51,8 +52,7 @@ class Wall {
     float blueValue = oldBlue | newBlue;
     wallColor = color(redValue, greenValue, blueValue);
     if(redValue == 255 && greenValue == 255 && blueValue == 255) {
-      toBeRemoved = true;
-      score ++;
+      remove();
     }
   }
   
@@ -81,6 +81,13 @@ class Wall {
       endShape(CLOSE);
       popMatrix();
     }
+  }
+  
+  void remove() {
+    wallSound.cue(0);
+    wallSound.play();
+    score ++;
+    toBeRemoved = true; // the body will be removed on the next iteration
   }
   
 }

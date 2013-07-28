@@ -8,6 +8,8 @@ import org.jbox2d.dynamics.*;
 ArrayList<Wall> walls;
 ArrayList<Ball> balls;
 ArrayList<PVector> newPath;
+AudioPlayer ballSound;
+AudioPlayer wallSound;
 color bgColor = 0;
 color[] ballColors;
 color nextBallColor;
@@ -36,6 +38,10 @@ void setup() {
   ddScroll = 0.0001;
   score = 0;
   maxim = new Maxim(this);
+  ballSound = maxim.loadFile("ball.wav");
+  ballSound.setLooping = false;
+  wallSound = maxim.loadFile("crash1.wav");
+  wallSound.setLooping = false;
   prepareNextBall();
   box2d = new Physics(this, width, height, 0, -5, width*2, height*2, width, height, 100);
   box2d.setCustomRenderingMethod(this, "myCustomRenderer");
@@ -92,6 +98,7 @@ void myCustomRenderer(World world) {
   for(int i = 0; i < walls.size(); i++) {
     Wall wall = walls.get(i);
     if(wall.toBeRemoved) {
+      //wall.body.type = Body.b2_dynamicBody;
       box2d.removeBody(wall.body);
       walls.remove(wall);
     }
@@ -119,11 +126,9 @@ void collision(Body b1, Body b2, float impulse) {
       ball = getBall(balls, b2);
       wall = getWall(walls, b1);
     }
-    ball.ballSound.volume(impulse);
-    ball.ballSound.cue(0);
-    ball.ballSound.play();
+    playBallSound(ball.ballSound, impulse);
     color ballColor = ball.ballColor;
-    wall.addColor(ballColor);
+    wall.combineColor(ballColor);
   }
 }
 
@@ -140,6 +145,12 @@ color getRandomBallColor() {
   int index = int(random(ballColors.length));
   index = min(index, ballColors.length - 1);
   return ballColors[index];
+}
+
+void playBallSound(float volume) {
+    ballSound.volume(volume);
+    ballSound.cue(0);
+    ballSound.play();
 }
 
 void prepareNextBall() {
