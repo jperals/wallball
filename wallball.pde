@@ -29,6 +29,7 @@ Maxim maxim;
 void setup() {
   size(640, 800);
   frameRate(30);
+  ballRadius = 10;
   addBallEvery = 80;
   bgColor = 0;
   ballColors = new color[]{#FF0000, #00FF00, #0000FF};
@@ -107,26 +108,31 @@ void myCustomRenderer(World world) {
 }
 
 void addNewBall() {
-  Ball ball = new Ball(nextBallPosition, scroll - 7, 7, nextBallColor);
+  Ball ball = new Ball(nextBallPosition, scroll - ballRadius, ballRadius, nextBallColor);
   balls.add(ball);
   prepareNextBall();
 }
 
 void collision(Body b1, Body b2, float impulse) {
-  if((b1.getMass() != 0 && b2.getMass() == 0) || (b1.getMass() == 0 && b2.getMass() != 0)) {
-    Ball ball;
-    Wall wall;
-    if(b1.getMass() != 0) {
-      ball = getBall(balls, b1);
-      wall = getWall(walls, b2);
-    }
-    else {
-      ball = getBall(balls, b2);
-      wall = getWall(walls, b1);
-    }
+  if(b1.getMass() != 0 || b2.getMass() != 0) { // at least one of the two entities that collided is a ball
     playBallSound(impulse);
-    color ballColor = ball.ballColor;
-    wall.combineColor(ballColor);
+    if(b1.getMass() != 0 && b1.getMass() != 0) { // both entities are balls
+      score += int(impulse*1000);
+    }
+    else { // one is a ball and the other is a wall
+      Ball ball;
+      Wall wall;
+      if(b1.getMass() != 0) {
+        ball = getBall(balls, b1);
+        wall = getWall(walls, b2);
+      }
+      else {
+        ball = getBall(balls, b2);
+        wall = getWall(walls, b1);
+      }
+      color ballColor = ball.ballColor;
+      wall.combineColor(ballColor);
+    }
   }
 }
 
