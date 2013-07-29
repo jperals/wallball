@@ -28,6 +28,7 @@ class Ball {
     body.createFixture(fd);
     body.ballColor = ballColor;
   }
+  
   void display() {
     Vec2 bodyPosition = body.getPosition();
     Vec2 bodyPixelsPosition = box2d.worldToScreen(bodyPosition);
@@ -35,8 +36,10 @@ class Ball {
     fill(ballColor);
     ellipse(bodyPixelsPosition.x, bodyPixelsPosition.y - scroll, radius*2, radius*2);
   }
+  
 }
 
+// given a body, return the ball it belongs to
 Ball getBall(ArrayList<Ball> balls, Body body) {
   Ball matchedBall; 
   for(int i = 0; i < balls.size(); i++) {

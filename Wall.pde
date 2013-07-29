@@ -31,8 +31,6 @@ class Wall {
         PVector newPoint = path[i];
         PolygonShape ps = new PolygonShape();
         float distance = box2d.screenToWorld(oldPoint.dist(newPoint));
-        //println(distance);
-        //float wallWidth = 0.1 + min(3, 0.2/distance);
         float wallWidth = 0.5;
         float w = distance*.5, h = box2d.screenToWorld(wallWidth);
         float rotation = getAngle(oldPoint, newPoint);
@@ -72,10 +70,13 @@ class Wall {
     float redValue = oldRed | newRed;
     float greenValue = oldGreen | newGreen;
     float blueValue = oldBlue | newBlue;
+    boolean wallBreaks = false;
     wallColor = color(redValue, greenValue, blueValue);
     if (redValue == 255 && greenValue == 255 && blueValue == 255) {
       remove();
+      wallBreaks = true;
     }
+    return wallBreaks;
   }
 
   void display() {
@@ -121,11 +122,11 @@ class Wall {
   void remove() {
     wallSound.cue(0);
     wallSound.play();
-    score ++;
     toBeRemoved = true; // the body will be removed on the next iteration
   }
 }
 
+// given a body, return the wall it belongs to
 Wall getWall(ArrayList<Wall> walls, Body body) {
   Wall matchedWall; 
   for (int i = 0; i < walls.size(); i++) {

@@ -41,7 +41,7 @@ void setup() {
   maxim = new Maxim(this);
   ballSound = maxim.loadFile("ball.wav");
   ballSound.setLooping = false;
-  wallSound = maxim.loadFile("crash1.wav");
+  wallSound = maxim.loadFile("beam.wav");
   wallSound.setLooping = false;
   prepareNextBall();
   box2d = new Physics(this, width, height, 0, -5, width*2, height*2, width, height, 100);
@@ -131,7 +131,9 @@ void collision(Body b1, Body b2, float impulse) {
         wall = getWall(walls, b1);
       }
       color ballColor = ball.ballColor;
-      wall.combineColor(ballColor);
+      if(wall.combineColor(ballColor)) {
+        score += 1000;
+      }
     }
   }
 }
