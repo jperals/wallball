@@ -79,7 +79,7 @@ class Wall {
     return wallBreaks;
   }
 
-  void display() {
+  void display(float scroll) {
     if (brightness(wallColor) == 0) {
       fill(emptyColor);
       stroke(emptyColor);

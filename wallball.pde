@@ -23,12 +23,15 @@ int nextBallCountDown;
 int addBallEvery;
 int score;
 CollisionDetector detector;
+boolean gameOver;
 
 Maxim maxim;
 
 void setup() {
+
   size(640, 800);
   frameRate(30);
+  
   ballRadius = 10;
   addBallEvery = 80;
   bgColor = 0;
@@ -38,35 +41,49 @@ void setup() {
   dScroll = 0.1;
   ddScroll = 0.0001;
   score = 0;
+  gameOver = false;
+  
   maxim = new Maxim(this);
   ballSound = maxim.loadFile("ball.wav");
   ballSound.setLooping = false;
   wallSound = maxim.loadFile("beam.wav");
   wallSound.setLooping = false;
-  prepareNextBall();
+    
   box2d = new Physics(this, width, height, 0, -5, width*2, height*2, width, height, 100);
   box2d.setCustomRenderingMethod(this, "myCustomRenderer");
   box2d.setDensity(10.0);
+  detector = new CollisionDetector (box2d, this);
+  
   balls = new ArrayList<Ball>();
   walls = new ArrayList<Wall>();
   newPath = new ArrayList<PVector>();
-  detector = new CollisionDetector (box2d, this);
+  prepareNextBall();
+
 }
 
 void draw() {
+  
   background(bgColor);
   fill(255);
-  text("Score: " + score, 20, 20);
-  if(addBallEvery - nextBallCountDown > 60) {
-    drawNextBallIndicator();
-  }    
-  if(nextBallCountDown == 0) {
-    addNewBall();
-    //nextBallCountDown = addBallEvery;
+  
+  if(gameOver) {
+    textAlign(CENTER, CENTER);
+    textSize(20);
+    text("Game Over!\nScore: " + score, width/2, height/2);
   }
-  nextBallCountDown --;
-  scroll += dScroll;
-  dScroll += ddScroll;
+  else {
+    text("score: " + score, 20, 20);
+    if(addBallEvery - nextBallCountDown > 60) { // wait for the current ball to fall, otherwise it's confusing
+      drawNextBallIndicator();
+    }    
+    if(nextBallCountDown == 0) {
+      addNewBall();
+    }
+    nextBallCountDown --;
+    scroll += dScroll;
+    dScroll += ddScroll;
+  }
+  
 }
 
 void mousePressed() {
@@ -85,24 +102,26 @@ void mouseReleased() {
 }
 
 void myCustomRenderer(World world) {
-  noStroke();
-  for(int i = 0; i < balls.size(); i++) {
-    Ball ball = balls.get(i);
-    if(ball.toBeRemoved) {
-      box2d.removeBody(ball.body);
-      balls.remove(ball);
+  if(!gameOver) {
+    noStroke();
+    for(int i = 0; i < balls.size(); i++) {
+      Ball ball = balls.get(i);
+      if(ball.toBeRemoved) {
+        box2d.removeBody(ball.body);
+        balls.remove(ball);
+      }
+      else {
+        gameOver = gameOver || ball.display(scroll); // if the ball has "fallen" to the top of the screen, the game will end
+      }
     }
-    else {
-      ball.display();
-    }
-  }
-  for(int i = 0; i < walls.size(); i++) {
-    Wall wall = walls.get(i);
-    if(wall.toBeRemoved) {
-      wall.breakWall(box2d);
-    }
-    else {
-      wall.display();
+    for(int i = 0; i < walls.size(); i++) {
+      Wall wall = walls.get(i);
+      if(wall.toBeRemoved) {
+        wall.breakWall(box2d);
+      }
+      else {
+        wall.display(scroll);
+      }
     }
   }
 }
@@ -114,7 +133,7 @@ void addNewBall() {
 }
 
 void collision(Body b1, Body b2, float impulse) {
-  if(b1.getMass() != 0 || b2.getMass() != 0) { // at least one of the two entities that collided is a ball
+  if(!gameOver && (b1.getMass() != 0 || b2.getMass() != 0)) { // at least one of the two entities that collided is a ball
     playBallSound(impulse);
     if(b1.getMass() != 0 && b1.getMass() != 0) { // both entities are balls
       score += int(impulse*1000);

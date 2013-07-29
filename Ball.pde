@@ -29,12 +29,14 @@ class Ball {
     body.ballColor = ballColor;
   }
   
-  void display() {
+  void display(float scroll) {
     Vec2 bodyPosition = body.getPosition();
     Vec2 bodyPixelsPosition = box2d.worldToScreen(bodyPosition);
     ellipseMode(CENTER);
     fill(ballColor);
     ellipse(bodyPixelsPosition.x, bodyPixelsPosition.y - scroll, radius*2, radius*2);
+    boolean isOutside = bodyPixelsPosition.y - scroll < -radius*2;
+    return isOutside; // if the ball has "fallen" to the top of the screen, the game will end
   }
   
 }
