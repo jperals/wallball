@@ -1,0 +1,58 @@
+html, body {
+    margin: 0;
+    height: 100%;
+    width: 100%;
+}
+
+body {
+    background-color: #3d3d3d;
+    color: #bbb;
+    line-height: normal;
+    font-family: Lucida Grande, Lucida Sans, Arial, Helvetica Neue, Verdana, Geneva, sans-serif;
+    font-size: 11px;
+    font-weight: normal;
+    text-decoration: none;
+    line-height: 1.5em;
+}
+
+a img { 
+    border: 0px solid transparent;
+}
+
+a, a:link, a:visited, a:active, a:hover { 
+    color: #cdcdcd; text-decoration: underline;
+}
+
+h1 {
+    font-family: Arial, Helvetica Neue, Verdana, Geneva, sans-serif;
+    width: 100%; letter-spacing: 0.1em;
+    margin-bottom: 1em; font-size: 1.65em;
+}
+
+canvas { 
+    display: block; 
+    margin: 0 auto;
+    outline: 0px; 
+    margin-bottom: 1.5em; 
+}
+
+#content { 
+    background-color: #111111;
+    padding: 0;
+    width: @@width@@px;
+    min-width: 300px;
+    overflow: auto;
+    border-left: 1px solid #444;
+    border-top: 1px solid #444; 
+    border-right: 1px solid #333;
+    border-bottom: 1px solid #333;
+    display: table;
+    height: 100%;
+    width: 100%;
+}
+
+#content > * {
+    display: table-cell;
+    vertical-align: middle;
+}
+
